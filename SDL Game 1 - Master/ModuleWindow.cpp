@@ -1,3 +1,4 @@
+#include "glew.h"
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
@@ -17,7 +18,7 @@ bool ModuleWindow::Init()
 	LOG("Init SDL window & surface");
 	bool ret = true;
 
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		LOG("SDL_VIDEO could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
@@ -29,7 +30,7 @@ bool ModuleWindow::Init()
 		int height = SCREEN_HEIGHT;
 		Uint32 flags = SDL_WINDOW_SHOWN;
 
-		if(FULLSCREEN == true)
+		if (FULLSCREEN == true)
 		{
 			flags |= SDL_WINDOW_FULLSCREEN;
 		}
@@ -37,9 +38,25 @@ bool ModuleWindow::Init()
 		// TODO 2: Create options for RESIZABLE, SDL_WINDOW_BORDERLESS, SDL_WINDOW_RESIZABLE,
 		// SDL_WINDOW_FULLSCREEN_DESKTOP (same way as with FULLSCREEN)
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		// OPEN GL INIT
+		
 
-		if(window == NULL)
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
+		flags |= SDL_WINDOW_OPENGL;
+
+		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags); // crear window
+
+		context = SDL_GL_CreateContext(window);
+
+	
+
+		if (window == NULL)
 		{
 			LOG("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			ret = false;
@@ -48,11 +65,28 @@ bool ModuleWindow::Init()
 		{
 			//Get window surface
 			screen_surface = SDL_GetWindowSurface(window);
+
+			//GLEW INIT
+			GLenum err = glewInit();
+			LOG("Using Glew %s", glewGetString(GLEW_VERSION));
+		
+			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+			glClearDepth(1.0f);
+			glClearColor(0.f, 0.f, 0.f, 1.f);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnable(GL_DEPTH_TEST);
+			glFrontFace(GL_CCW);
+			glEnable(GL_CULL_FACE);
+			glEnable(GL_TEXTURE_2D);
+			glViewport(0, 0,SCREEN_WIDTH, SCREEN_HEIGHT);
+			glClearDepth(1.0f);
+			glClearColor(0.3f, 0.3f, 0.3f, 1.f); 
 		}
 	}
 
 	return ret;
 }
+
 
 // Called before quitting
 bool ModuleWindow::CleanUp()
@@ -64,6 +98,8 @@ bool ModuleWindow::CleanUp()
 	{
 		SDL_DestroyWindow(window);
 	}
+
+	SDL_GL_DeleteContext(context);
 
 	//Quit SDL subsystems
 	SDL_Quit();

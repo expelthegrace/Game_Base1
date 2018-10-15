@@ -21,6 +21,10 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	SDL_GLContext context;
+
+
+
 public:
 	//The window we'll be rendering to
 	SDL_Window* window = NULL;

@@ -8,6 +8,7 @@ class ModuleRender;
 class ModuleWindow;
 class ModuleTextures;
 class ModuleInput;
+class TriangleModule;
 
 class Application
 {
@@ -25,6 +26,7 @@ public:
 	ModuleWindow* window;
 	ModuleTextures* textures;
 	ModuleInput* input;
+	TriangleModule * triangleModul;
 
 private:
 

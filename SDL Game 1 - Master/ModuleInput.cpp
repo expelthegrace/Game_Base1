@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "SDL/include/SDL.h"
+#include "glew.h"
 
 ModuleInput::ModuleInput()
 {}
@@ -33,9 +34,14 @@ update_status ModuleInput::Update()
 
 	keyboard = SDL_GetKeyboardState(NULL);
 
+	SDL_Event event;
+	SDL_PollEvent(&event);
+	if (event.type == SDL_WINDOWEVENT) {
+		if (event.window.event == SDL_WINDOWEVENT_RESIZED) glViewport(0, 0, event.window.data1, event.window.data2);
+	}
+
 	// TODO 1: Make the application properly close when ESC is pressed (do not use exit())
 
-	// Homework: Make the application close up when pressing “X” button of the window
 
 	return UPDATE_CONTINUE;
 }
