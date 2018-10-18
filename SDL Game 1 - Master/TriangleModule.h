@@ -17,9 +17,10 @@ public:
 	bool Init();
 	GLuint vbo;
 	//update_status PreUpdate();
-	//update_status Update();
+	update_status Update();
 	update_status PostUpdate();
 	
+	float rotX, rotY, rotZ;
 
 };
 

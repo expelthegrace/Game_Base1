@@ -45,6 +45,8 @@ update_status ModuleRender::PreUpdate()
 update_status ModuleRender::Update()
 {
 	
+
+
 	return UPDATE_CONTINUE;
 }
 

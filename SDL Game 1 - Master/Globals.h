@@ -17,6 +17,8 @@ enum update_status
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 #define FULLSCREEN false
+#define RESIZABLE_WINDOW true
+
 #define VSYNC true
 #define TITLE "Super Awesome Game"
 #define SPRITE_FILE "sprites.png"

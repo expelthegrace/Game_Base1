@@ -27,6 +27,7 @@ bool TriangleModule::Init() {
 	return true;
 }
 
+
 update_status TriangleModule::PostUpdate() {
 	glEnableVertexAttribArray(0); // attribute 0
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
